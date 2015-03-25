@@ -4,10 +4,13 @@
     <script src="https://fb.me/react-0.13.1.js"></script>
     <script src="https://fb.me/JSXTransformer-0.13.1.js"></script>
     <script src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
   </head>
   <body>
     <div id="content"></div>
     <script type="text/jsx">
+      var converter = new Showdown.converter();
+
       var CommentBox = React.createClass({
         render: function() {
           return (
@@ -43,12 +46,13 @@
 
       var Comment = React.createClass({
         render: function() {
+          var rawMarkup = converter.makeHtml(this.props.children.toString());
           return (
             <div className="comment">
               <h2 className="commentAuthor">
                 {this.props.author}
               </h2>
-              {this.props.children}
+              <span dangerouslySetInnerHTML={{__html: rawMarkup}} />
             </div>
           );
         }
