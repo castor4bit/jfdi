@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Hello React</title>
+    <script src="http://fb.me/react-0.13.1.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.13.1.js"></script>
+    <body>
+      <div id="example"></div>
+      <script type="text/jsx">
+        var HelloWorld = React.createClass({
+          componentDidMount: function() {
+            setInterval(function() {
+              this.props.date = new Date();
+              this.setState({});
+            }.bind(this), 1000);
+          },
+          render: function() {
+            return (
+              <p>
+              Hello, <input type="text" placeholder="Your name here" />!
+              It is {this.props.date.toString()}
+              </p>
+            );
+          }
+        });
+        React.render(
+          <HelloWorld date={new Date()} />,
+          document.getElementById('example')
+        );
+      </script>
+    </body>
+  </head>
