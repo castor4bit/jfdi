@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "build": "browserify 02_require_file.js -o 02_require_file_bundled.js",
+    "watch": "watchify   02_require_file.js -o 02_require_file_bundled.js --debug --verbose"
+  }
+}
