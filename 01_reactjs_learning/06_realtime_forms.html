@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Input Example (form)</title>
+  <script src="http://fb.me/react-0.13.1.js"></script>
+  <script src="http://fb.me/JSXTransformer-0.13.1.js"></script>
+</head>
+<body>
+  <div id="example1"></div>
+  <div id="example2"></div>
+
+  <script type="text/jsx">
+    var InputExample = React.createClass({
+      getInitialState: function() {
+        return {
+          count: 0,
+          text: ""
+        }
+      },
+      onInputText: function(text) {
+        this.setState({
+          count: text.length,
+          text: text
+        });
+      },
+      render: function() {
+        return (
+          <div>
+            <TextInfo count={this.state.count} text={this.state.text} />
+            <TextArea onInputText={this.onInputText} />
+          </div>
+        );
+      }
+    });
+
+    var TextInfo = React.createClass({
+      propTypes: {
+        text: React.PropTypes.string,
+        count: React.PropTypes.number.isRequired
+      },
+      render: function() {
+        return (
+          <p>
+            <pre>{this.props.text}</pre>
+            <span>({this.props.count}chars)</span>
+          </p>
+        );
+      }
+    });
+
+    var TextArea = React.createClass({
+      onInputText: function(event) {
+        var text = React.findDOMNode(this.refs.text).value.trim();
+        this.props.onInputText(text);
+      },
+      render: function() {
+        return (
+          <textarea placeholder="Input any text." ref="text" onInput={this.onInputText} />
+        );
+      }
+    });
+
+    React.render(
+      <InputExample />,
+      document.getElementById('example1')
+    );
+
+    //------------------------------------------------------------------------
+    var SelectContainer = React.createClass({
+      getInitialState: function() {
+        var options = [
+          { value: "1", text: "AAA" },
+          { value: "2", text: "BBB" },
+          { value: "3", text: "CCC" },
+          { value: "Z", text: "ZZZ" },
+          { value: "5", text: "東京" }
+        ];
+
+        return {options: options};
+      },
+      render: function() {
+        return (
+          <div className="selectContainer">
+            <SelectBox options={this.state.options} defaultValue="3" />
+          </div>
+        );
+      }
+    });
+
+    var SelectBox = React.createClass({
+      getInitialState: function() {
+        return {
+          selectedValue: this.props.defaultValue
+        };
+      },
+      onChangeSelectbox: function() {
+        var element = React.findDOMNode(this.refs.value);
+        var value = element.value;
+        this.setState({
+          selectedValue: value
+        });
+
+        React.findDOMNode(this.refs.selectedItem).textContent = element.options[element.selectedIndex].textContent;
+      },
+      render: function() {
+        var options = this.props.options.map(function(data) {
+          return (
+            <option value={data.value}>{data.text}</option>
+          );
+        });
+        return (
+          <div>
+            <select className="selectBox" value={this.state.selectedValue} ref="value" onChange={this.onChangeSelectbox}>
+              {options}
+            </select>
+            <span className="selectedItem" ref="selectedItem"></span>
+          </div>
+        );
+      }
+    });
+
+    React.render(
+      <SelectContainer />,
+      document.getElementById('example2')
+    );
+
+  </script>
+</body>
+</html>
