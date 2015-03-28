@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Input Example</title>
+  <script src="http://fb.me/react-0.13.1.js"></script>
+  <script src="http://fb.me/JSXTransformer-0.13.1.js"></script>
+</head>
+<body>
+  <div id="example"></div>
+
+  <script type="text/jsx">
+    var InputExample = React.createClass({
+      getInitialState: function() {
+        return {
+          count: 0,
+          text: ""
+        }
+      },
+      onInputText: function(text) {
+        this.setState({
+          count: text.length,
+          text: text
+        });
+      },
+      render: function() {
+        return (
+          <div>
+            <TextInfo count={this.state.count} text={this.state.text} />
+            <InputForm onInputText={this.onInputText} />
+          </div>
+        );
+      }
+    });
+
+    var TextInfo = React.createClass({
+      render: function() {
+        return (
+          <p>
+            <span>{this.props.text}</span>
+            <span>({this.props.count}chars)</span>
+          </p>
+        );
+      }
+    });
+
+    var InputForm = React.createClass({
+      onInputText: function(event) {
+        var text = React.findDOMNode(this.refs.text).value.trim();
+        this.props.onInputText(text);
+      },
+      render: function() {
+        return (
+          <input type="text" placeholder="Input any text." ref="text" onInput={this.onInputText} />
+        );
+      }
+    });
+
+    React.render(
+      <InputExample />,
+      document.getElementById('example')
+    );
+  </script>
+</body>
+</html>
