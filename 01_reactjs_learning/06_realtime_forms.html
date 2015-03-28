@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Input Example (form)</title>
   <script src="http://fb.me/react-0.13.1.js"></script>
+  <script src="http://fb.me/react-with-addons-0.13.1.js"></script>
   <script src="http://fb.me/JSXTransformer-0.13.1.js"></script>
 </head>
 <body>
@@ -82,7 +83,8 @@
       render: function() {
         return (
           <div className="selectContainer">
-            <SelectBox options={this.state.options} defaultValue="3" />
+            <SelectBox              options={this.state.options} defaultValue="3" />
+            <SelectBoxWithReactLink options={this.state.options} defaultValue="Z" />
           </div>
         );
       }
@@ -112,6 +114,34 @@
         return (
           <div>
             <select className="selectBox" value={this.state.selectedValue} ref="value" onChange={this.onChangeSelectbox}>
+              {options}
+            </select>
+            <span className="selectedItem" ref="selectedItem"></span>
+          </div>
+        );
+      }
+    });
+
+    var SelectBoxWithReactLink = React.createClass({
+      mixins: [React.addons.LinkedStateMixin],
+      getInitialState: function() {
+        return {
+          value: this.props.defaultValue
+        };
+      },
+      componentWillUpdate: function() {
+        var element = React.findDOMNode(this.refs.value);
+        React.findDOMNode(this.refs.selectedItem).textContent = element.options[element.selectedIndex].textContent;
+      },
+      render: function() {
+        var options = this.props.options.map(function(data) {
+          return (
+            <option value={data.value}>{data.text}</option>
+          );
+        });
+        return (
+          <div>
+            <select className="selectBox" ref="value" valueLink={this.linkState('value')}>
               {options}
             </select>
             <span className="selectedItem" ref="selectedItem"></span>
