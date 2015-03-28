@@ -34,6 +34,10 @@
     });
 
     var TextInfo = React.createClass({
+      propTypes: {
+        text: React.PropTypes.string,
+        count: React.PropTypes.number.isRequired
+      },
       render: function() {
         return (
           <p>
