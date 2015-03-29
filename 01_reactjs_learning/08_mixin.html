@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mixin</title>
+  <script src="http://fb.me/react-0.13.1.js"></script>
+  <script src="http://fb.me/JSXTransformer-0.13.1.js"></script>
+</head>
+<body>
+  <div id="example"></div>
+
+  <script type="text/jsx;harmony=true">
+    var Logger = {
+      logging(str) {
+        console.log(str);
+      },
+      componentDidMount() {
+        this.logging('componennt did mount (at Logger)');
+      }
+    };
+
+    var Hello = React.createClass({
+      mixins: [Logger],
+      componentDidMount() {
+        this.logging('componennt did mount (at Hello)');
+      },
+      render() {
+        this.logging('render');
+        return (
+          <div>Hello</div>
+        );
+      }
+    });
+
+    React.render(
+      <Hello />,
+      document.getElementById('example')
+    );
+  </script>
+</body>
+</html>
