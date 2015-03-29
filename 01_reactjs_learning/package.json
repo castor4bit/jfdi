@@ -1,6 +1,10 @@
 {
   "devDependencies": {
     "babelify": "^5.0.4",
+    "express": "^4.12.3",
+    "fs": "0.0.2",
+    "handlebars": "^3.0.1",
+    "node-jsx": "^0.12.4",
     "react": "^0.13.1",
     "reactify": "^1.1.0"
   }
