@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ReactCssTransitionGroup</title>
+  <script src="http://fb.me/react-with-addons-0.13.1.js"></script>
+  <script src="http://fb.me/JSXTransformer-0.13.1.js"></script>
+</head>
+<body>
+  <div id="example"></div>
+
+  <script type="text/jsx;harmony=true">
+    var ReactCssTransitionGroup = React.addons.CSSTransitionGroup;
+
+    var TodoList = React.createClass({
+      getInitialState() {
+        return {
+          "items": ['hello', 'world', 'click', 'me']
+        };
+      },
+      handleAdd() {
+        var newItems = this.state.items.concat([prompt('Enter some text')]);
+        this.setState({items: newItems});
+      },
+      handleRemove(i) {
+        var newItems = this.state.items;
+        newItems.splice(i, 1);
+        this.setState({items: newItems});
+      },
+      render() {
+        var items = this.state.items.map(function(item, i) {
+          return (
+            <div key={item} onClick={this.handleRemove.bind(this, i)}>
+              {item}
+            </div>
+          );
+        }, this);
+
+        return (
+          <div>
+            <button onClick={this.handleAdd}>Add Item</button>
+            <ReactCssTransitionGroup transitionName="example">
+              {items}
+            </ReactCssTransitionGroup>
+          </div>
+        );
+      }
+    });
+
+    React.render(
+      <TodoList />,
+      document.getElementById('example')
+    );
+  </script>
+  <style type="text/css">
+    .example-enter {
+      opacity: 0.01;
+      transition: opacity .5s ease-in;
+    }
+    .example-enter.example-enter-active {
+      opacity: 1;
+    }
+    .example-leave {
+      opacity: 1;
+      transition: .5s ease-in;
+    }
+    .example-leave.example-leave-active {
+      opacity: 0.01;
+    }
+  </style>
+</body>
+</html>
