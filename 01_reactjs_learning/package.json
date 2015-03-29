@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "babelify": "^5.0.4",
+    "react": "^0.13.1",
+    "reactify": "^1.1.0"
+  }
+}
