@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "build": "browserify -t [ babelify --experimental ] app/index.js -o dist/todomvc.js",
+    "watch": "watchify   -t [ babelify --experimental ] app/index.js -o dist/todomvc.js -v"
+  },
+  "devDependencies": {
+    "babelify": "^5.0.4",
+    "react": "^0.13.1",
+    "watchify": "^3.1.0"
+  }
+}
