@@ -2,6 +2,8 @@ var React = require('react');
 var cx = require('classnames');
 var ReactPropTypes = React.PropTypes;
 
+var TodoTextInput = require('./TodoTextInput.react');
+
 var TodoItem = React.createClass({
   propTypes: {
     todo: ReactPropTypes.object.isRequired
@@ -15,6 +17,16 @@ var TodoItem = React.createClass({
 
   render: function() {
     var todo = this.props.todo;
+
+    var input;
+    if (this.state.isEditing) {
+      input =
+        <TodoTextInput
+          className="edit"
+          onSave={this.onSave}
+          value={todo.text}
+        />;
+    }
 
     return (
       <li
@@ -36,6 +48,7 @@ var TodoItem = React.createClass({
           </label>
           <button className="destroy" onClick={this.onDestroyClick} />
         </div>
+        {input}
       </li>
     );
   },
