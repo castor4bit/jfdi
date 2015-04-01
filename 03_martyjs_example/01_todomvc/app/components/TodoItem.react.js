@@ -44,7 +44,7 @@ var TodoItem = React.createClass({
             checked={todo.complete}
             onChange={this.onToggleComplete}
           />
-          <label onDoubleclick={this.onDoubleclick}>
+          <label onDoubleClick={this.onDoubleClick}>
             {todo.text}
           </label>
           <button className="destroy" onClick={this.onDestroyClick} />
@@ -58,7 +58,7 @@ var TodoItem = React.createClass({
     TodoActions.toggleComplete(this.props.todo);
   },
 
-  onDoubleclick: function() {
+  onDoubleClick: function() {
     this.setState({isEditing: true});
   },
 
