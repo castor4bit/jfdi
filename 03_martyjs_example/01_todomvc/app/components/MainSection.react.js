@@ -1,6 +1,7 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
 
+var TodoActions = require('../actions/TodoActions');
 var TodoItem = require('./TodoItem.react');
 
 var MainSection = React.createClass({
@@ -16,7 +17,6 @@ var MainSection = React.createClass({
   },
 
   render: function() {
-    console.log(this.props.allTodos);
     if (Object.keys(this.props.allTodos).length < 1) {
       return null;
     }
@@ -43,7 +43,7 @@ var MainSection = React.createClass({
   },
 
   onToggleCompleteAll: function() {
-    //
+    TodoActions.toggleCompleteAll();
   }
 });
 

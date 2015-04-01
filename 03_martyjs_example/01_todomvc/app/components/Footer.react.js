@@ -1,5 +1,6 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
+var TodoActions = require('../actions/TodoActions');
 
 var Footer = React.createClass({
 
@@ -49,7 +50,7 @@ var Footer = React.createClass({
   },
 
   onClearCompletedClick: function() {
-    //
+    TodoActions.destroyCompleted();
   }
 });
 

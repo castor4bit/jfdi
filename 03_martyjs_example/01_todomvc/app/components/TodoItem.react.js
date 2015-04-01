@@ -2,6 +2,7 @@ var React = require('react');
 var cx = require('classnames');
 var ReactPropTypes = React.PropTypes;
 
+var TodoActions = require('../actions/TodoActions');
 var TodoTextInput = require('./TodoTextInput.react');
 
 var TodoItem = React.createClass({
@@ -54,19 +55,20 @@ var TodoItem = React.createClass({
   },
 
   onToggleComplete: function() {
-    //
+    TodoActions.toggleComplete(this.props.todo);
   },
 
   onDoubleclick: function() {
     this.setState({isEditing: true});
   },
 
-  onSave: function() {
+  onSave: function(text) {
+    TodoActions.updateText(this.props.todo.id, text);
     this.setState({isEditing: false});
   },
 
   onDestroyClick: function() {
-    //
+    TodoActions.destroy(this.props.todo.id);
   }
 });
 

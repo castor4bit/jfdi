@@ -1,6 +1,6 @@
 var Marty = require('marty');
 
-module.exports = Marty.createConstans([
+module.exports = Marty.createConstants([
   'TODO_CREATE',
   'TODO_COMPLETE',
   'TODO_DESTROY',
