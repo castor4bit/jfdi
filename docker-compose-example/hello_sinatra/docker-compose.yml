@@ -1,12 +1,21 @@
 web:
-  build: .
-  command: bundle exec ruby app.rb -o 0.0.0.0
+  image: nginx:latest
+  links:
+    - api:api
   ports:
-    - "4567:4567"
+    - "80:80"
   volumes:
-    - .:/app
+    - ./web:/etc/nginx/conf.d
+  volumes_from:
+    - api
+api:
+  build: ./api
+  command: bundle exec ruby app.rb -o 0.0.0.0
+  expose:
+    - "4567"
+  volumes:
+    - ./api:/app
   links:
     - redis
 redis:
   image: redis:latest
-

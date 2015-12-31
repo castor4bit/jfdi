@@ -7,6 +7,10 @@ redis = Redis.new(
   port: ENV["REDIS_PORT_6379_TCP_PORT"]
 )
 
+before do
+  headers 'X-Loadbaranced-Host' => ENV["HOSTNAME"]
+end
+
 get '/data/:key' do
   value = redis.get params[:key]
   v = {
