@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/4.0.7/rx.all.js"></script>
+</head>
+<body>
+
+  <script>
+  // http://liginc.co.jp/web/js/151272
+
+  var sample1 = function(n) {
+    var observer = Rx.Observer.create(function(num) {
+      return console.log('(' + n +') onNext: '+ num);
+    }, function(error) {
+      return console.log('(' + n +') onError: '+ error);
+    }, function() {
+      return console.log('('+ n +') onCompleted');
+    });
+
+    Rx.Observable
+      .from([1, 2, 3, 4, 5, 6, 7, 8])
+      .delay(function(num) {
+        return Rx.Observable.timer(num * 500);
+      })
+      .filter(function(num) {
+        return num % 2;
+      })
+      .map(function(num) {
+        return num * num;
+      })
+      .subscribe(observer);
+  }
+
+  (function(n) {
+    var source = Rx.Observable.create(function(observer) {
+      var num = 0;
+      var id = setInterval(function() {
+        observer.onNext(num++);
+      }, 500);
+
+      setTimeout(function() {
+        observer.onCompleted();
+      }, 10000);
+
+      return function() {
+        console.log('(' + n + ') disposed');
+        clearInterval(id);
+      };
+    });
+
+    var subscription = source.subscribe(
+      function(x) {
+        console.log('(' + n + ') onNext: '+ x);
+      },
+      function(e) {
+        console.log('(' + n + ') onError: '+ e);
+      },
+      function() {
+        console.log('(' + n + ') onCompleted');
+      });
+
+    setTimeout(function() {
+      subscription.dispose();
+    }, 5000);
+  })(2);
+
+  (function(n) {
+    var source = Rx.Observable.interval(1000);
+    var subscription1 = source.subscribe(function(x) {
+      console.log('Observer 1: onNext: '+ x);
+    });
+    var subscription2;
+
+    setTimeout(function() {
+      subscription2 = source.subscribe(function(x) {
+        console.log('Observer 1: onNext: '+ x);
+      });
+    });
+
+    setTimeout(function() {
+      subscription1.dispose();
+      subscription2.dispose();
+    }, 5000);
+  })(3);
+
+  </script>
+</body>
+</html>
+
+

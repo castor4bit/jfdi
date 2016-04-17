@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/4.0.7/rx.all.js"></script>
+</head>
+<body>
+  <script>
+    // http://qiita.com/toRisouP/items/f6088963037bfda658d3
+    // http://xgrommx.github.io/rx-book/content/subjects/subject/index.html
+
+    // subscribeする前にストリームに流した場合
+    // hotとかcoldとかの前にpublishSubjectだと普通の動作ではないのかしら…？
+    (function(n) {
+      var subject = new Rx.Subject();
+
+      var source = subject.asObservable();
+      var observable = source.scan(function(a, b) { return a + b; });
+
+      subject.onNext('A');
+      subject.onNext('B');
+
+      observable.subscribe(
+        // onNext
+        function(s) { console.log('(' + n +') onNext: '+ s); },
+        // onError
+        function(s) { console.log('(' + n +') onError: '+ s); },
+        // onCompleted
+        function(s) { console.log('(' + n +') onCompleted'); }
+      );
+
+      subject.onNext('C');
+      subject.onCompleted();
+    })(1);
+
+    // publish() して connect() すると、ストリームが開始されるとか
+    // これは状態持っているsubjectならではの動作という感じもする
+    // まだ全然理解度が足りない。。
+    //
+    // http://xgrommx.github.io/rx-book/content/observable/observable_instance_methods/publish.html
+    // > This operator is a specialization of multicast using a regular Rx.Subject.
+    // って書いてある
+    (function(n) {
+      var subject = new Rx.Subject();
+
+      var source = subject.asObservable();
+      var observable = source.scan(function(a, b) { return a + b; }).publish();
+      observable.connect();
+
+      subject.onNext('A');
+      subject.onNext('B');
+
+      observable.subscribe(
+        // onNext
+        function(s) { console.log('(' + n +') onNext: '+ s); },
+        // onError
+        function(s) { console.log('(' + n +') onError: '+ s); },
+        // onCompleted
+        function(s) { console.log('(' + n +') onCompleted'); }
+      );
+
+      subject.onNext('C');
+      subject.onCompleted();
+    })(2);
+  </script>
+</body>
+</html>
+

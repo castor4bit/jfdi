@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/4.0.7/rx.all.js"></script>
+  <style>
+    li {
+      padding: 5px;
+    }
+    li img {
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Who to follow?</h2>
+
+  <a href="#" class="refresh">Refresh</a>
+
+  <ul class="suggestions">
+    <li class="suggestion1">
+      <img />
+      <a href="#" target="_blank" class="username">this will not be displayed</a>
+      <a href="#" class="close close1">x</a>
+    </li>
+    <li class="suggestion2">
+      <img />
+      <a href="#" target="_blank" class="username">this will not be displayed</a>
+      <a href="#" class="close close2">x</a>
+    </li>
+    <li class="suggestion3">
+      <img />
+      <a href="#" target="_blank" class="username">this will not be displayed</a>
+      <a href="#" class="close close3">x</a>
+    </li>
+  </ul>
+
+  <script>
+  // http://xgrommx.github.io/rx-book/content/guidelines/introduction/index.html#implementing-a-who-to-follow-suggestions-box
+  // http://jsfiddle.net/staltz/8jFJH/48/
+  var refreshButton = document.querySelector('.refresh');
+  var closeButton1 = document.querySelector('.close1');
+  var closeButton2 = document.querySelector('.close2');
+  var closeButton3 = document.querySelector('.close3');
+
+  var refreshClickStream = Rx.Observable.fromEvent(refreshButton, 'click');
+  var close1ClickStream = Rx.Observable.fromEvent(closeButton1, 'click');
+  var close2ClickStream = Rx.Observable.fromEvent(closeButton2, 'click');
+  var close3ClickStream = Rx.Observable.fromEvent(closeButton3, 'click');
+
+  var requestStream = refreshClickStream.startWith('startup click')
+                        .map(function() {
+                          var randomOffset = Math.floor(Math.random() * 500);
+                          return 'https://api.github.com/users?since=' + randomOffset;
+                        });
+
+  var responseStream = requestStream.flatMap(function(requestUrl) {
+    return Rx.Observable.fromPromise($.getJSON(requestUrl));
+  });
+
+  function createSuggestionStream(closeClickStream) {
+    return closeClickStream.startWith('startup click')
+      .combineLatest(responseStream, function(click, listUsers) {
+        return listUsers[Math.floor(Math.random() * listUsers.length)];
+      })
+      .merge(refreshClickStream.map(function() {
+        return null;
+      }))
+      .startWith(null);
+  }
+
+  var suggestion1Stream = createSuggestionStream(close1ClickStream);
+  var suggestion2Stream = createSuggestionStream(close2ClickStream);
+  var suggestion3Stream = createSuggestionStream(close3ClickStream);
+
+  function renderSuggestion(suggestionUser, selector) {
+    var suggestionEl = document.querySelector(selector);
+    if (suggestionUser === null) {
+      suggestionEl.style.visibility = 'hidden';
+    } else {
+      suggestionEl.style.visibility = 'visible';
+      var usernameEl = suggestionEl.querySelector('.username');
+      usernameEl.href = suggestionUser.html_url;
+      usernameEl.textContent = suggestionUser.login;
+      var imgEl = suggestionEl.querySelector('img');
+      imgEl.src = "";
+      imgEl.src = suggestionUser.avatar_url;
+    }
+  }
+
+  suggestion1Stream.subscribe(function(suggestionUser) { renderSuggestion(suggestionUser, '.suggestion1'); });
+  suggestion2Stream.subscribe(function(suggestionUser) { renderSuggestion(suggestionUser, '.suggestion2'); });
+  suggestion3Stream.subscribe(function(suggestionUser) { renderSuggestion(suggestionUser, '.suggestion3'); });
+  </script>
+</body>
+</html>
+
