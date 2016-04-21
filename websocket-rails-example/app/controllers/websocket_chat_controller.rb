@@ -1,5 +1,13 @@
 class WebsocketChatController < WebsocketRails::BaseController
 
+  def client_connected
+    p 'client connected **************************************************'
+  end
+
+  def client_disconnected
+    p 'client disconnected ###############################################'
+  end
+
   def message_recieve
     # 受信したメッセージをブロードキャスト
     recieve_message = message()
