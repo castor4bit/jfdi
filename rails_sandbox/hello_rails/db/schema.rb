@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_17_015914) do
+ActiveRecord::Schema.define(version: 2019_12_17_021653) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.string "url"
     t.string "title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "links", force: :cascade do |t|
+    t.string "url"
+    t.string "memo"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
